@@ -1,0 +1,234 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #0654a9;
+  --gradient: linear-gradient(
+    335deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(0, 0, 88, 1) 31%,
+    rgba(6, 84, 168, 1) 100%
+  );
+}
+
+@font-face {
+  font-family: "Reactor7";
+  src: url(fonts/Reactor7.ttf);
+  font-style: normal;
+  font-weight: 100;
+  font-size: 32px;
+}
+
+body {
+  background-color: #000;
+  font-family: Reactor7, sans-serif;
+  color: #fff;
+  font-size: 48px;
+  text-shadow: 2px 2px #000;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 5fr 1fr;
+  height: 100vh;
+  width: 100vw;
+}
+/* ---------------------------- */
+/* BASE STYLE FOR ALL MENU ITEMS */
+.menu {
+  background-color: var(--blue);
+  background: var(--gradient);
+  width: 100%;
+  height: 100%;
+  border-radius: 1%;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3) inset;
+  border: 3px solid #e9e9e9;
+  border-radius: 1%;
+}
+/* ---------------------------- */
+
+/* MAIN GRID */
+.menu-container {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  height: 100%;
+  background-color: #000;
+  display: grid;
+}
+
+/* FOR THE PARTY REFORM MENU */
+.reform-menu {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr repeat(3, 2fr);
+  position: relative;
+  grid-gap: 3px;
+}
+.options {
+  grid-column: span 5;
+  grid-row: 1;
+  z-index: 0;
+}
+.options-text {
+  text-align: left;
+  align-items: flex-start;
+  justify-content: left;
+  margin-left: 10px;
+  margin-top: 20px;
+  font-size: 36px;
+}
+
+.phs {
+  grid-column: 4 / 5;
+  grid-row: 1/2;
+  z-index: 1;
+  position: absolute;
+}
+.phs-text {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  margin-top: 20px;
+  float: left;
+}
+
+.main {
+  grid-column: 1 / 3;
+  grid-row: 2 / 5;
+  display: grid;
+  grid-template-rows: repeat(3, 2fr) 1fr;
+}
+.character {
+  padding: 15px 20px 15px 20px;
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr 3fr;
+  grid-template-rows: repeat(4, 1fr);
+  font-size: 32px;
+  color: #1fd7ce;
+}
+.character-background {
+  background-color: #fff;
+  width: 80%;
+  height: 100%;
+  grid-row: 1/5;
+}
+.character-pic {
+  width: 100%;
+  height: 100%;
+}
+.character-name {
+  grid-column: 2/5;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  margin-top: 3px;
+}
+.character-lv {
+  grid-row: 2/3;
+  grid-column: 2/3;
+}
+.character-lv-num {
+  grid-row: 2/3;
+  grid-column: 3/4;
+  color: #fff;
+}
+
+/**************************/
+/* GRID TEMPLATE FOR THE HP/MP NUMBERS AND BARS */
+.num-grid {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+}
+/**************************/
+
+/* Basic properties for HP/MP bars*/
+.bar {
+  width: 100%;
+  height: 3px;
+}
+
+.black-bar {
+  width: 100%;
+  height: 3px;
+  background-color: #000;
+}
+
+/*************************/
+/* HP BAR */
+.hp-grid {
+  grid-row: 3/4;
+  grid-column: 3/5;
+}
+.character-hp {
+  grid-row: 3/4;
+  grid-column: 2/3;
+}
+.character-hp-num {
+  grid-row: 1;
+  color: #fff;
+  text-align: right;
+}
+.hp-bar {
+  background: linear-gradient(
+    270deg,
+    rgba(217, 217, 227, 1) 0%,
+    rgba(103, 148, 217, 1) 21%,
+    rgba(6, 84, 168, 1) 100%
+  );
+}
+
+/****************************/
+/* MP BAR */
+.mp-grid {
+  grid-row: 4/5;
+  grid-column: 3/5;
+}
+.character-mp {
+  grid-row: 4/5;
+  grid-column: 2/3;
+}
+.character-mp-num {
+  color: #fff;
+  text-align: right;
+  grid-row: 1;
+}
+.mp-bar {
+  background: linear-gradient(
+    246deg,
+    rgba(217, 217, 227, 1) 0%,
+    rgba(114, 195, 174, 1) 21%,
+    rgba(64, 198, 151, 1) 100%
+  );
+}
+
+.pick {
+  grid-column: 3 / 5;
+  grid-row: 2 / 3;
+}
+
+/******************************/
+/* THE PARTY SECTION */
+.party {
+  grid-column: 3 / 5;
+  grid-row: 3 / 5;
+}
+
+.party-grid {
+  height: 80%;
+  width: 80%;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.party-background {
+  width: 100%;
+  height: 111px;
+  background-color: #fff;
+}
