@@ -30,6 +30,10 @@ body {
   text-shadow: 2px 2px #000;
 }
 
+.hidden {
+  display: none;
+}
+
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -172,6 +176,7 @@ body {
   color: #fff;
   text-align: right;
 }
+
 .hp-bar {
   background: linear-gradient(
     270deg,
@@ -203,6 +208,9 @@ body {
     rgba(114, 195, 174, 1) 21%,
     rgba(64, 198, 151, 1) 100%
   );
+}
+.characterCloud .mp-bar {
+  width: 100%;
 }
 
 .pick {
