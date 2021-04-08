@@ -1,5 +1,15 @@
 'use strict';
 
+// toybox monster
+//#b2000a zero health red
+//#E8E800 low health yellow
+
+////////////////////////////////////////
+/*--------- DOM ELEMENTS  -----------*/
+////////////////////////////////////////
+const pickMenu = document.querySelector('.pick');
+const mainMenu = document.querySelector('.main');
+
 ////////////////////////////////////////
 /*--------- PARTY MEMBERS  -----------*/
 ////////////////////////////////////////
@@ -13,7 +23,7 @@ const characters = [
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'aeris',
@@ -23,7 +33,7 @@ const characters = [
     hpMax: 1200,
     mpCurrent: 239,
     mpMax: 634,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'barret',
@@ -63,7 +73,7 @@ const characters = [
     hpMax: 5822,
     mpCurrent: 504,
     mpMax: 544,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'cid',
@@ -83,7 +93,7 @@ const characters = [
     hpMax: 5373,
     mpCurrent: 330,
     mpMax: 577,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'vincent',
@@ -93,7 +103,7 @@ const characters = [
     hpMax: 5086,
     mpCurrent: 500,
     mpMax: 598,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'sephiroth',
@@ -103,7 +113,7 @@ const characters = [
     hpMax: 9000,
     mpCurrent: 999,
     mpMax: 999,
-    inParty: true,
+    inParty: false,
   },
 ];
 
@@ -111,196 +121,63 @@ function addtoParty() {
   characters.map((char) => {
     if (char.inParty) {
       document.querySelector('.main').innerHTML += `
-      <div class="character">
-              <div class="character-background">
-                <div class="character-pic">
-                  <img src="menu/${char.id}.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="character-name">
-                <p>${char.name}</p>
-              </div>
-              <div class="character-lv">
-                <p>LV</p>
-              </div>
-              <div class="character-lv-num">
-                <p>${char.level}</p>
-              </div>
-              <div class="character-hp">
-                <p>HP</p>
-              </div>
-              <div class="num-grid hp-grid">
-                <div class="character-hp-num">
-                  <p>${char.hpCurrent}/${char.hpMax}</p>
-                </div>
-                <div class="whole-bar">
-                  <div class="hp-bar bar"></div>
-                  <div class="black-bar"></div>
-                </div>
-              </div>
-              <div class="character-mp">
-                <p>MP</p>
-              </div>
-              <div class="num-grid mp-grid">
-                <div class="character-mp-num">
-                  <p>${char.mpCurrent}/${char.mpMax}</p>
-                </div>
-                <div class="whole-bar">
-                  <div class="mp-bar bar"></div>
-                  <div class="black-bar"></div>
-                </div>
-              </div>
-            </div>
+<div class="character">
+        <div class="character-background">
+          <div class="character-pic">
+            <img src="menu/${char.id}.png" alt="" class="character-pic" />
+          </div>
+        </div>
+        <div class="character-name">
+          <p>${char.name}</p>
+        </div>
+        <div class="character-lv">
+          <p>LV</p>
+        </div>
+        <div class="character-lv-num">
+          <p>${char.level}</p>
+        </div>
+        <div class="character-hp">
+          <p>HP</p>
+        </div>
+        <div class="num-grid hp-grid">
+          <div class="character-hp-num">
+            <p>${char.hpCurrent}/${char.hpMax}</p>
+          </div>
+          <div class="whole-bar">
+            <div class="hp-bar bar"></div>
+            <div class="black-bar"></div>
+          </div>
+        </div>
+        <div class="character-mp">
+          <p>MP</p>
+        </div>
+        <div class="num-grid mp-grid">
+          <div class="character-mp-num">
+            <p>${char.mpCurrent}/${char.mpMax}</p>
+          </div>
+          <div class="whole-bar">
+            <div class="mp-bar bar"></div>
+            <div class="black-bar"></div>
+          </div>
+        </div>
+</div>
+      `;
+    } else {
+      document.querySelector('.party-grid').innerHTML += `
+<div class="party-background">
+  <div class="character-pic ${char.id}">
+      <img src="menu/${char.id}.png" alt="" class="character-pic" />
+  </div>
+</div>
       `;
     }
   });
 }
 addtoParty();
 
-function generateHTMLAvailableParty() {
-  const availableChar = characters.filter((char) => !char.inParty);
-  return availableChar.map((char) => {
-    return `
-<div class="party-background">
-    <div class="character-pic ${char.id}">
-        <img src="menu/${char.id}.png" alt="" class="character-pic" />
-    </div>
-</div>
-`;
-  });
-}
-
-document.querySelector(
-  '.party-grid'
-).innerHTML = generateHTMLAvailableParty().join('');
-
-////////////////////////////////////////
-/*--------- DOM ELEMENTS  -----------*/
-////////////////////////////////////////
-const pickMenu = document.querySelector('.pick');
-const mainMenu = document.querySelector('.main');
-
-/////////////////////////////////////
-///////////////
-/// CLOUD IS THE ONLY STATIC ELEMENT, HE CAN NOT BE REMOVED FROM YOUR PARTY
-///////////////
-/////////////////////////////////////
-
-// const cloudFunc = () => {
-//   // CLOUD NAME AND LEVEL
-//   document.querySelector(
-//     '.characterCloud .character-name'
-//   ).innerHTML = `<p>${characters[0].name}</p>`;
-//   document.querySelector(
-//     '.characterCloud .character-lv-num'
-//   ).innerHTML = `${characters[0].level}`;
-
-//   // CLOUD HP BAR AND NUMBERS
-//   document.querySelector(
-//     '.characterCloud .character-hp-num'
-//   ).innerHTML = `<p><span class='hp-min'>${characters[0].hpCurrent}</span>/${characters[0].hpMax} </p>`;
-//   document.querySelector('.characterCloud .hp-bar ').style.width = `${
-//     (characters[0].hpCurrent / characters[0].hpMax) * 100
-//   }%`;
-
-//   // CLOUD MP BAR AND NUMBERS
-//   document.querySelector(
-//     '.characterCloud .character-mp-num'
-//   ).innerHTML = `<p><span class="mp-min">${characters[0].mpCurrent}</span> / ${characters[0].mpMax} </p>`;
-//   document.querySelector('.characterCloud .mp-bar ').style.width = `${
-//     (characters[0].mpCurrent / characters[0].mpMax) * 100
-//   }%`;
-// };
-
-// cloudFunc();
-
-// const colorCheck = () => {
-//   if (characters[0].hpCurrent === 0) {
-//     document.querySelector(
-//       '.characterCloud .character-hp-num'
-//     ).style.color = `#b2000a`;
-//     document.querySelector('.character-lv-num').style.color = `#b2000a`;
-//     document.querySelector('.character-name').style.color = `#b2000a`;
-//     document.querySelector('.character-mp-num').style.color = `#b2000a`;
-//   } else if (characters[0].hpCurrent <= characters[0].hpMax * 0.25) {
-//     document.querySelector('.hp-min').style.color = '#E8E800';
-//   }
-
-//   if (characters[0].mpCurrent === 0) {
-//     document.querySelector('.characterCloud .character-mp-num').style.color =
-//       '#b2000a';
-//   } else if (characters[0].mpCurrent <= characters[0].mpMax * 0.25) {
-//     document.querySelector('.mp-min').style.color = '#E8E800';
-//   }
-// };
-// colorCheck();
-
-// const showCharacter = ({ character }) => {
-//   <div>character.name</div>;
-// };
-
-const barAdjust = (cur, max) => (cur / max) * 100;
-
-const showChar = (char) => {
-  pickMenu.innerHTML = `
-<div class="character hoverpick ${char.id}gen">
-                <div class="character-background">
-                    <div class="character-pic">
-                        <img src="menu/${
-                          char.id
-                        }.png" alt="" class="character-pic">
-                    </div>
-                </div>
-                <div class="character-name">
-                    <p>${char.name}</p>
-                </div>
-                <div class="character-lv">
-                    <p>LV</p>
-                </div>
-                <div class="character-lv-num">
-                    <p>${char.level}</p>
-                </div>
-                <div class="character-hp">
-                    <p>HP</p>
-                </div>
-                <div class="num-grid hp-grid">
-                    <div class="character-hp-num">
-                        <p>${char.hpCurrent}/${char.hpMax}</p>
-                    </div>
-                    <div class="whole-bar">
-
-                        <div class="hp-bar bar" style="width: ${barAdjust(
-                          char.hpCurrent,
-                          char.hpMax
-                        )}%"></div>
-                        <div class="black-bar"></div>
-                    </div>
-                </div>
-                <div class="character-mp">
-                    <p>MP</p>
-                </div>
-                <div class="num-grid mp-grid">
-                    <div class="character-mp-num">
-                        <p>${char.mpCurrent}/${char.mpMax}</p>
-                    </div>
-                    <div class="whole-bar">
-
-                        <div class="mp-bar bar" style="width: ${barAdjust(
-                          char.mpCurrent,
-                          char.mpMax
-                        )}%"></div>
-                        <div class="black-bar"></div>
-                    </div>
-                </div>
-            </div>
-
-`;
-};
-
-//////////////////////////////////////////////////
-/*--------- SHOW CHARACTER ON HOVER  -----------*/
-//////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////
+/*--------- SHOW CHARACTER ON HOVER & PARTY SWAP  -----------*/
+///////////////////////////////////////////////////////////////
 characters.map((char) => {
   const charDiv = document?.querySelector(`.${char.id}`);
 
@@ -311,26 +188,61 @@ characters.map((char) => {
     });
   });
 
-  // charDiv?.addEventListener('click', () => {
-  //   showChar(char);
-  //   document.querySelector(`.${char.id}gen`).classList.add('show');
-  //   document.querySelector(`.${char.id}gen`).classList.remove('hidden');
-  // });
+  const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
+
+  const showChar = (char) => {
+    pickMenu.innerHTML = `
+  <div class="character hoverpick ${char.id}gen">
+    <div class="character-background">
+      <div class="character-pic">
+        <img src="menu/${char.id}.png" alt="" class="character-pic">
+      </div>
+    </div>
+    <div class="character-name">
+      <p>${char.name}</p>
+    </div>
+    <div class="character-lv">
+      <p>LV</p>
+    </div>
+    <div class="character-lv-num">
+      <p>${char.level}</p>
+    </div>
+    <div class="character-hp">
+      <p>HP</p>
+    </div>
+    <div class="num-grid hp-grid">
+      <div class="character-hp-num">
+        <p>${char.hpCurrent}/${char.hpMax}</p>
+      </div>
+    <div class="whole-bar">
+    <div class="hp-bar bar" style="width: ${barAdjust(
+      char.hpCurrent,
+      char.hpMax
+    )}%">
+    </div>
+    <div class="black-bar"></div>
+        </div>
+    </div>
+    <div class="character-mp">
+        <p>MP</p>
+    </div>
+    <div class="num-grid mp-grid">
+        <div class="character-mp-num">
+            <p>${char.mpCurrent}/${char.mpMax}</p>
+        </div>
+        <div class="whole-bar">
+
+            <div class="mp-bar bar" style="width: ${barAdjust(
+              char.mpCurrent,
+              char.mpMax
+            )}%"></div>
+            <div class="black-bar"></div>
+        </div>
+    </div>
+</div>
+
+  `;
+  };
 });
 
-//   // CLOUD HP BAR AND NUMBERS
-//   document.querySelector(
-//     ".characterCloud .character-hp-num"
-//   ).innerHTML = `<p><span class='hp-min'>${characters.cloud.hpCurrent}</span>/${characters.cloud.hpMax} </p>`;
-//   document.querySelector(".characterCloud .hp-bar ").style.width = `${
-//     (characters.cloud.hpCurrent / characters.cloud.hpMax) * 100
-//   }%`;
-
-//   // CLOUD MP BAR AND NUMBERS
-//   document.querySelector(
-//     ".characterCloud .character-mp-num"
-//   ).innerHTML = `<p><span class="mp-min">${characters.cloud.mpCurrent}</span> / ${characters.cloud.mpMax} </p>`;
-//   document.querySelector(".characterCloud .mp-bar ").style.width = `${
-//     (characters.cloud.mpCurrent / characters.cloud.mpMax) * 100
-//   }%`;
-// };
+const swapMembers = (first, second) => {};
