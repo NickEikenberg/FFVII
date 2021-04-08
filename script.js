@@ -23,7 +23,7 @@ const characters = [
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'aeris',
@@ -33,7 +33,7 @@ const characters = [
     hpMax: 1200,
     mpCurrent: 239,
     mpMax: 634,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'barret',
@@ -43,7 +43,7 @@ const characters = [
     hpMax: 6146,
     mpCurrent: 480,
     mpMax: 531,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'tifa',
@@ -53,7 +53,7 @@ const characters = [
     hpMax: 3146,
     mpCurrent: 700,
     mpMax: 739,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'redxiii',
@@ -93,7 +93,7 @@ const characters = [
     hpMax: 5373,
     mpCurrent: 330,
     mpMax: 577,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'vincent',
@@ -103,7 +103,7 @@ const characters = [
     hpMax: 5086,
     mpCurrent: 500,
     mpMax: 598,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'sephiroth',
@@ -121,6 +121,7 @@ function addtoParty() {
   characters.map((char) => {
     if (char.inParty) {
       document.querySelector('.main').innerHTML += `
+      <a href="#" class="${char.id}InParty">
 <div class="character">
         <div class="character-background">
           <div class="character-pic">
@@ -161,88 +162,136 @@ function addtoParty() {
           </div>
         </div>
 </div>
-      `;
-    } else {
-      document.querySelector('.party-grid').innerHTML += `
-<div class="party-background">
-  <div class="character-pic ${char.id}">
-      <img src="menu/${char.id}.png" alt="" class="character-pic" />
-  </div>
-</div>
+</a>
       `;
     }
   });
 }
 addtoParty();
 
+function addToPick() {
+  characters.map((char) => {
+    if (!char.inParty) {
+      document.querySelector('.party-grid').innerHTML += `
+      <a href="#">
+<div class="party-background">
+  <div class="character-pic ${char.id}">
+      <img src="menu/${char.id}.png" alt="" class="character-pic" />
+  </div>
+</div>
+</a>
+      `;
+    }
+  });
+}
+
+addToPick();
+
+const swapMembers = () => {
+  characters.map((char) => {
+    const main = document?.querySelector(`.${char.id}InParty`);
+
+    main?.addEventListener('click', () => {
+      console.log(char.id);
+      characters.map((char2) => {
+        const pick = document?.querySelector(`.${char2.id}`);
+        pick?.addEventListener('click', () => {
+          console.log(char.id, char2.id);
+          char.inParty = !char.inParty;
+          char2.inParty = !char2.inParty;
+          console.log(char.inParty, char2.inParty);
+          document.querySelector('.party-grid').innerHTML = ``;
+          document.querySelector('.main').innerHTML = ``;
+          document.querySelector('.pick').innerHTML = ``;
+          addtoParty();
+          addToPick();
+          init();
+          // document.querySelector('.party-grid').innerHTML += `<a href="#">
+          // <div class="party-background">
+          //   <div class="character-pic ${char.id}">
+          //       <img src="menu/${char.id}.png" alt="" class="character-pic" />
+          //   </div>
+          // </div>
+          // </a>`;
+        });
+      });
+    });
+  });
+};
+swapMembers();
+
 ///////////////////////////////////////////////////////////////
 /*--------- SHOW CHARACTER ON HOVER & PARTY SWAP  -----------*/
 ///////////////////////////////////////////////////////////////
-characters.map((char) => {
-  const charDiv = document?.querySelector(`.${char.id}`);
 
-  charDiv?.addEventListener('mouseover', () => {
-    showChar(char);
-    charDiv?.addEventListener('mouseleave', () => {
-      document.querySelector(`.${char.id}gen`).classList.add('hidden');
+function init() {
+  characters.map((char) => {
+    const charDiv = document?.querySelector(`.${char.id}`);
+
+    charDiv?.addEventListener('mouseover', () => {
+      showChar(char);
+      charDiv?.addEventListener('mouseleave', () => {
+        document.querySelector(`.${char.id}gen`).classList.add('hidden');
+      });
     });
+
+    const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
+
+    const showChar = (char) => {
+      pickMenu.innerHTML = `
+    
+    <div class="character hoverpick ${char.id}gen">
+      <div class="character-background">
+        <div class="character-pic">
+          <img src="menu/${char.id}.png" alt="" class="character-pic">
+        </div>
+      </div>
+      <div class="character-name">
+        <p>${char.name}</p>
+      </div>
+      <div class="character-lv">
+        <p>LV</p>
+      </div>
+      <div class="character-lv-num">
+        <p>${char.level}</p>
+      </div>
+      <div class="character-hp">
+        <p>HP</p>
+      </div>
+      <div class="num-grid hp-grid">
+        <div class="character-hp-num">
+          <p>${char.hpCurrent}/${char.hpMax}</p>
+        </div>
+      <div class="whole-bar">
+      <div class="hp-bar bar" style="width: ${barAdjust(
+        char.hpCurrent,
+        char.hpMax
+      )}%">
+      </div>
+      <div class="black-bar"></div>
+          </div>
+      </div>
+      <div class="character-mp">
+          <p>MP</p>
+      </div>
+      <div class="num-grid mp-grid">
+          <div class="character-mp-num">
+              <p>${char.mpCurrent}/${char.mpMax}</p>
+          </div>
+          <div class="whole-bar">
+  
+              <div class="mp-bar bar" style="width: ${barAdjust(
+                char.mpCurrent,
+                char.mpMax
+              )}%"></div>
+              <div class="black-bar"></div>
+          </div>
+      </div>
+  </div>
+  
+    `;
+    };
   });
+}
 
-  const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
-
-  const showChar = (char) => {
-    pickMenu.innerHTML = `
-  <div class="character hoverpick ${char.id}gen">
-    <div class="character-background">
-      <div class="character-pic">
-        <img src="menu/${char.id}.png" alt="" class="character-pic">
-      </div>
-    </div>
-    <div class="character-name">
-      <p>${char.name}</p>
-    </div>
-    <div class="character-lv">
-      <p>LV</p>
-    </div>
-    <div class="character-lv-num">
-      <p>${char.level}</p>
-    </div>
-    <div class="character-hp">
-      <p>HP</p>
-    </div>
-    <div class="num-grid hp-grid">
-      <div class="character-hp-num">
-        <p>${char.hpCurrent}/${char.hpMax}</p>
-      </div>
-    <div class="whole-bar">
-    <div class="hp-bar bar" style="width: ${barAdjust(
-      char.hpCurrent,
-      char.hpMax
-    )}%">
-    </div>
-    <div class="black-bar"></div>
-        </div>
-    </div>
-    <div class="character-mp">
-        <p>MP</p>
-    </div>
-    <div class="num-grid mp-grid">
-        <div class="character-mp-num">
-            <p>${char.mpCurrent}/${char.mpMax}</p>
-        </div>
-        <div class="whole-bar">
-
-            <div class="mp-bar bar" style="width: ${barAdjust(
-              char.mpCurrent,
-              char.mpMax
-            )}%"></div>
-            <div class="black-bar"></div>
-        </div>
-    </div>
-</div>
-
-  `;
-  };
-});
-
-const swapMembers = (first, second) => {};
+init();

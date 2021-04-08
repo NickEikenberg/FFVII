@@ -244,3 +244,10 @@ body {
 .show {
   display: block;
 }
+a {
+  text-decoration: none;
+  width: auto;
+}
+a:hover {
+  cursor: pointer;
+}
