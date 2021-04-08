@@ -1,46 +1,35 @@
 "use strict";
 
+const characterNames = [
+  "barret",
+  "aeris",
+  "tifa",
+  "redxiii",
+  "caitsith",
+  "cid",
+  "yuffie",
+  "vincent",
+  "sephiroth",
+];
+
 function generateHTMLAvailableParty() {
-  document.querySelector(".party-grid").innerHTML = `
-    <div class="party-background">
-                <div class="character-pic cid">
-                  <img src="menu/Cid.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic aeris">
-                  <img src="menu/Aeris.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic barret">
-                  <img src="menu/Barret.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic caitsith">
-                  <img src="menu/CaitSith.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic yuffie">
-                  <img src="menu/Yuffie.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic vincent">
-                  <img src="menu/Vincent.png" alt="" class="character-pic" />
-                </div>
-              </div>
-              <div class="party-background">
-                <div class="character-pic sephiroth">
-                  <img src="menu/Sephiroth.png" alt="" class="character-pic" />
-                </div>
-              </div>
-    `;
+  console.log(characterNames);
+  return characterNames.map(
+    (name) => `
+<div class="party-background">
+    <div class="character-pic ${name}">
+        <img src="menu/${name}.png" alt="" class="character-pic" />
+    </div>
+</div>
+`
+  );
 }
 
-generateHTMLAvailableParty();
+document.querySelector(
+  ".party-grid"
+).innerHTML = generateHTMLAvailableParty().join("");
+
+console.log(generateHTMLAvailableParty());
 
 ////////////////////////////////////////
 /*--------- DOM ELEMENTS  -----------*/
@@ -54,16 +43,25 @@ const mainMenu = document.querySelector(".main");
 
 const characters = {
   cloud: {
-    id: "cloud",
+    id: "Cloud",
     name: "Cloud", //Cloud
     level: 77, //77
-    hpCurrent: 7777, //4923
+    hpCurrent: 5000, //4923
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
   },
+  aeris: {
+    id: "Aeris",
+    name: "Aeris",
+    level: 42,
+    hpCurrent: 777,
+    hpMax: 1200,
+    mpCurrent: 239,
+    mpMax: 634,
+  },
   barret: {
-    id: "barret",
+    id: "Barret",
     name: "Barret",
     level: 65,
     hpCurrent: 6146,
@@ -72,7 +70,7 @@ const characters = {
     mpMax: 531,
   },
   tifa: {
-    id: "tifa",
+    id: "Tifa",
     name: "Tifa",
     level: 74,
     hpCurrent: 3146,
@@ -81,7 +79,7 @@ const characters = {
     mpMax: 739,
   },
   redxiii: {
-    id: "redxiii",
+    id: "RedXIII",
     name: "Red XIII",
     level: 75,
     hpCurrent: 5127,
@@ -90,7 +88,7 @@ const characters = {
     mpMax: 932,
   },
   caitsith: {
-    id: "caitsith",
+    id: "CaitSith",
     name: "Cait Sith",
     level: 62,
     hpCurrent: 5822,
@@ -99,7 +97,7 @@ const characters = {
     mpMax: 544,
   },
   cid: {
-    id: "cid",
+    id: "Cid",
     name: "Cid",
     level: 62,
     hpCurrent: 5822,
@@ -108,7 +106,7 @@ const characters = {
     mpMax: 544,
   },
   yuffie: {
-    id: "yuffie",
+    id: "Yuffie",
     name: "Yuffie",
     level: 67,
     hpCurrent: 5373,
@@ -117,7 +115,7 @@ const characters = {
     mpMax: 577,
   },
   vincent: {
-    id: "vincent",
+    id: "Vincent",
     name: "Vincent",
     level: 65,
     hpCurrent: 5086,
@@ -126,7 +124,7 @@ const characters = {
     mpMax: 598,
   },
   sephiroth: {
-    id: "sephiroth",
+    id: "Sephiroth",
     name: "Sephiroth",
     level: 80,
     hpCurrent: 7777,
@@ -190,3 +188,82 @@ const colorCheck = () => {
   }
 };
 colorCheck();
+
+// const showCharacter = ({ character }) => {
+//   <div>character.name</div>;
+// };
+
+const showChar = (char) =>
+  (pickMenu.innerHTML = `
+<div class="character hoverpick">
+                <div class="character-background">
+                    <div class="character-pic">
+                        <img src="menu/${char.id}.png" alt="" class="character-pic">
+                    </div>
+                </div>
+                <div class="character-name">
+                    <p>${char.name}</p>
+                </div>
+                <div class="character-lv">
+                    <p>LV</p>
+                </div>
+                <div class="character-lv-num">
+                    <p>${char.level}</p>
+                </div>
+                <div class="character-hp">
+                    <p>HP</p>
+                </div>
+                <div class="num-grid hp-grid">
+                    <div class="character-hp-num">
+                        <p>${char.hpCurrent}/${char.hpMax}</p>
+                    </div>
+                    <div class="whole-bar">
+
+                        <div class="hp-bar bar"></div>
+                        <div class="black-bar"></div>
+                    </div>
+                </div>
+                <div class="character-mp">
+                    <p>MP</p>
+                </div>
+                <div class="num-grid mp-grid">
+                    <div class="character-mp-num">
+                        <p>${char.mpCurrent}/${char.mpMax}</p>
+                    </div>
+                    <div class="whole-bar">
+
+                        <div class="mp-bar bar"></div>
+                        <div class="black-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+
+`);
+
+//////////////////////////////////////////////////
+/*--------- SHOW CHARACTER ON HOVER  -----------*/
+//////////////////////////////////////////////////
+
+characterNames.map((name) => {
+  const charDiv = document?.querySelector(`.${name}`);
+
+  charDiv?.addEventListener("mouseover", () => showChar(characters[name]));
+});
+
+//   // CLOUD HP BAR AND NUMBERS
+//   document.querySelector(
+//     ".characterCloud .character-hp-num"
+//   ).innerHTML = `<p><span class='hp-min'>${characters.cloud.hpCurrent}</span>/${characters.cloud.hpMax} </p>`;
+//   document.querySelector(".characterCloud .hp-bar ").style.width = `${
+//     (characters.cloud.hpCurrent / characters.cloud.hpMax) * 100
+//   }%`;
+
+//   // CLOUD MP BAR AND NUMBERS
+//   document.querySelector(
+//     ".characterCloud .character-mp-num"
+//   ).innerHTML = `<p><span class="mp-min">${characters.cloud.mpCurrent}</span> / ${characters.cloud.mpMax} </p>`;
+//   document.querySelector(".characterCloud .mp-bar ").style.width = `${
+//     (characters.cloud.mpCurrent / characters.cloud.mpMax) * 100
+//   }%`;
+// };
