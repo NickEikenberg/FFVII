@@ -9,7 +9,7 @@ const characters = [
     id: 'cloud',
     name: 'Cloud', //Cloud
     level: 77, //77
-    hpCurrent: 0, //4923
+    hpCurrent: 1000, //4923
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
@@ -43,7 +43,7 @@ const characters = [
     hpMax: 3146,
     mpCurrent: 700,
     mpMax: 739,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'redxiii',
@@ -53,7 +53,7 @@ const characters = [
     hpMax: 5127,
     mpCurrent: 785,
     mpMax: 932,
-    inParty: true,
+    inParty: false,
   },
   {
     id: 'caitsith',
@@ -63,7 +63,7 @@ const characters = [
     hpMax: 5822,
     mpCurrent: 504,
     mpMax: 544,
-    inParty: false,
+    inParty: true,
   },
   {
     id: 'cid',
@@ -103,9 +103,60 @@ const characters = [
     hpMax: 9000,
     mpCurrent: 999,
     mpMax: 999,
-    inParty: false,
+    inParty: true,
   },
 ];
+
+function addtoParty() {
+  characters.map((char) => {
+    if (char.inParty) {
+      document.querySelector('.main').innerHTML += `
+      <div class="character">
+              <div class="character-background">
+                <div class="character-pic">
+                  <img src="menu/${char.id}.png" alt="" class="character-pic" />
+                </div>
+              </div>
+              <div class="character-name">
+                <p>${char.name}</p>
+              </div>
+              <div class="character-lv">
+                <p>LV</p>
+              </div>
+              <div class="character-lv-num">
+                <p>${char.level}</p>
+              </div>
+              <div class="character-hp">
+                <p>HP</p>
+              </div>
+              <div class="num-grid hp-grid">
+                <div class="character-hp-num">
+                  <p>${char.hpCurrent}/${char.hpMax}</p>
+                </div>
+                <div class="whole-bar">
+                  <div class="hp-bar bar"></div>
+                  <div class="black-bar"></div>
+                </div>
+              </div>
+              <div class="character-mp">
+                <p>MP</p>
+              </div>
+              <div class="num-grid mp-grid">
+                <div class="character-mp-num">
+                  <p>${char.mpCurrent}/${char.mpMax}</p>
+                </div>
+                <div class="whole-bar">
+                  <div class="mp-bar bar"></div>
+                  <div class="black-bar"></div>
+                </div>
+              </div>
+            </div>
+      `;
+    }
+  });
+}
+addtoParty();
+
 function generateHTMLAvailableParty() {
   const availableChar = characters.filter((char) => !char.inParty);
   return availableChar.map((char) => {
@@ -135,54 +186,54 @@ const mainMenu = document.querySelector('.main');
 ///////////////
 /////////////////////////////////////
 
-const cloudFunc = () => {
-  // CLOUD NAME AND LEVEL
-  document.querySelector(
-    '.characterCloud .character-name'
-  ).innerHTML = `<p>${characters[0].name}</p>`;
-  document.querySelector(
-    '.characterCloud .character-lv-num'
-  ).innerHTML = `${characters[0].level}`;
+// const cloudFunc = () => {
+//   // CLOUD NAME AND LEVEL
+//   document.querySelector(
+//     '.characterCloud .character-name'
+//   ).innerHTML = `<p>${characters[0].name}</p>`;
+//   document.querySelector(
+//     '.characterCloud .character-lv-num'
+//   ).innerHTML = `${characters[0].level}`;
 
-  // CLOUD HP BAR AND NUMBERS
-  document.querySelector(
-    '.characterCloud .character-hp-num'
-  ).innerHTML = `<p><span class='hp-min'>${characters[0].hpCurrent}</span>/${characters[0].hpMax} </p>`;
-  document.querySelector('.characterCloud .hp-bar ').style.width = `${
-    (characters[0].hpCurrent / characters[0].hpMax) * 100
-  }%`;
+//   // CLOUD HP BAR AND NUMBERS
+//   document.querySelector(
+//     '.characterCloud .character-hp-num'
+//   ).innerHTML = `<p><span class='hp-min'>${characters[0].hpCurrent}</span>/${characters[0].hpMax} </p>`;
+//   document.querySelector('.characterCloud .hp-bar ').style.width = `${
+//     (characters[0].hpCurrent / characters[0].hpMax) * 100
+//   }%`;
 
-  // CLOUD MP BAR AND NUMBERS
-  document.querySelector(
-    '.characterCloud .character-mp-num'
-  ).innerHTML = `<p><span class="mp-min">${characters[0].mpCurrent}</span> / ${characters[0].mpMax} </p>`;
-  document.querySelector('.characterCloud .mp-bar ').style.width = `${
-    (characters[0].mpCurrent / characters[0].mpMax) * 100
-  }%`;
-};
+//   // CLOUD MP BAR AND NUMBERS
+//   document.querySelector(
+//     '.characterCloud .character-mp-num'
+//   ).innerHTML = `<p><span class="mp-min">${characters[0].mpCurrent}</span> / ${characters[0].mpMax} </p>`;
+//   document.querySelector('.characterCloud .mp-bar ').style.width = `${
+//     (characters[0].mpCurrent / characters[0].mpMax) * 100
+//   }%`;
+// };
 
-cloudFunc();
+// cloudFunc();
 
-const colorCheck = () => {
-  if (characters[0].hpCurrent === 0) {
-    document.querySelector(
-      '.characterCloud .character-hp-num'
-    ).style.color = `#b2000a`;
-    document.querySelector('.character-lv-num').style.color = `#b2000a`;
-    document.querySelector('.character-name').style.color = `#b2000a`;
-    document.querySelector('.character-mp-num').style.color = `#b2000a`;
-  } else if (characters[0].hpCurrent <= characters[0].hpMax * 0.25) {
-    document.querySelector('.hp-min').style.color = '#E8E800';
-  }
+// const colorCheck = () => {
+//   if (characters[0].hpCurrent === 0) {
+//     document.querySelector(
+//       '.characterCloud .character-hp-num'
+//     ).style.color = `#b2000a`;
+//     document.querySelector('.character-lv-num').style.color = `#b2000a`;
+//     document.querySelector('.character-name').style.color = `#b2000a`;
+//     document.querySelector('.character-mp-num').style.color = `#b2000a`;
+//   } else if (characters[0].hpCurrent <= characters[0].hpMax * 0.25) {
+//     document.querySelector('.hp-min').style.color = '#E8E800';
+//   }
 
-  if (characters[0].mpCurrent === 0) {
-    document.querySelector('.characterCloud .character-mp-num').style.color =
-      '#b2000a';
-  } else if (characters[0].mpCurrent <= characters[0].mpMax * 0.25) {
-    document.querySelector('.mp-min').style.color = '#E8E800';
-  }
-};
-colorCheck();
+//   if (characters[0].mpCurrent === 0) {
+//     document.querySelector('.characterCloud .character-mp-num').style.color =
+//       '#b2000a';
+//   } else if (characters[0].mpCurrent <= characters[0].mpMax * 0.25) {
+//     document.querySelector('.mp-min').style.color = '#E8E800';
+//   }
+// };
+// colorCheck();
 
 // const showCharacter = ({ character }) => {
 //   <div>character.name</div>;
