@@ -15,7 +15,7 @@
 }
 
 @font-face {
-  font-family: "Reactor7";
+  font-family: 'Reactor7';
   src: url(fonts/Reactor7.ttf);
   font-style: normal;
   font-weight: 100;
@@ -240,4 +240,7 @@ body {
 
 .hidden {
   display: none;
+}
+.show {
+  display: block;
 }
