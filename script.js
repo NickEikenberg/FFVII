@@ -1,9 +1,9 @@
 'use strict';
 
-// toybox monster
 //#b2000a zero health red
 //#E8E800 low health yellow
 
+const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
 ////////////////////////////////////////
 /*--------- DOM ELEMENTS  -----------*/
 ////////////////////////////////////////
@@ -19,7 +19,7 @@ const characters = [
     id: 'cloud',
     name: 'Cloud', //Cloud
     level: 77, //77
-    hpCurrent: 1000, //4923
+    hpCurrent: 777, //4923
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
@@ -69,7 +69,7 @@ const characters = [
     id: 'caitsith',
     name: 'Cait Sith',
     level: 62,
-    hpCurrent: 3208,
+    hpCurrent: 300,
     hpMax: 5822,
     mpCurrent: 504,
     mpMax: 544,
@@ -79,7 +79,7 @@ const characters = [
     id: 'cid',
     name: 'Cid',
     level: 62,
-    hpCurrent: 2390,
+    hpCurrent: 0,
     hpMax: 5822,
     mpCurrent: 130,
     mpMax: 544,
@@ -117,35 +117,62 @@ const characters = [
   },
 ];
 
+const inParty = characters.filter((char) => char.inParty);
+const notInParty = characters.filter((char) => !char.inParty);
+
+const colorCheckRed = (char) => {
+  if (char.hpCurrent === 0) {
+    return `#b2000a`;
+  } else {
+    return `#FFF`;
+  }
+};
+const colorCheckYellow = (char) => {
+  if (char.hpCurrent < char.hpMax * 0.1 && char.hpCurrent > 0) {
+    return `#E8E800`;
+  } else if (char.hpCurrent === 0) {
+    return `#b2000a`;
+  } else {
+    return `#FFF`;
+  }
+};
+
 function addtoParty() {
-  characters.map((char) => {
+  inParty.map((char) => {
     if (char.inParty) {
       document.querySelector('.main').innerHTML += `
       <a href="#" class="${char.id}InParty">
-<div class="character">
+<div class="character ${char.id}Div">
         <div class="character-background">
           <div class="character-pic">
             <img src="menu/${char.id}.png" alt="" class="character-pic" />
           </div>
         </div>
         <div class="character-name">
-          <p>${char.name}</p>
+          <p style="color: ${colorCheckRed(char)}">${char.name}</p>
         </div>
         <div class="character-lv">
           <p>LV</p>
         </div>
         <div class="character-lv-num">
-          <p>${char.level}</p>
+          <p style="color: ${colorCheckRed(char)}">${char.level}</p>
         </div>
         <div class="character-hp">
           <p>HP</p>
         </div>
         <div class="num-grid hp-grid">
           <div class="character-hp-num">
-            <p>${char.hpCurrent}/${char.hpMax}</p>
+            <p style="color: ${colorCheckRed(
+              char
+            )}"><span style="color: ${colorCheckYellow(char)}">${
+        char.hpCurrent
+      }</span>/${char.hpMax}</p>
           </div>
           <div class="whole-bar">
-            <div class="hp-bar bar"></div>
+            <div class="hp-bar bar" style="width:${barAdjust(
+              char.hpCurrent,
+              char.hpMax
+            )}%"></div>
             <div class="black-bar"></div>
           </div>
         </div>
@@ -154,10 +181,15 @@ function addtoParty() {
         </div>
         <div class="num-grid mp-grid">
           <div class="character-mp-num">
-            <p>${char.mpCurrent}/${char.mpMax}</p>
+            <p style="color: ${colorCheckRed(char)}">${char.mpCurrent}/${
+        char.mpMax
+      }</p>
           </div>
           <div class="whole-bar">
-            <div class="mp-bar bar"></div>
+            <div class="mp-bar bar" style="width:${barAdjust(
+              char.mpCurrent,
+              char.mpMax
+            )}%"></div>
             <div class="black-bar"></div>
           </div>
         </div>
@@ -170,11 +202,11 @@ function addtoParty() {
 addtoParty();
 
 function addToPick() {
-  characters.map((char) => {
+  notInParty.map((char) => {
     if (!char.inParty) {
       document.querySelector('.party-grid').innerHTML += `
-      <a href="#">
-<div class="party-background">
+      <a href="#" class="${char.id}InPick">
+<div class="party-background ${char.id}Div">
   <div class="character-pic ${char.id}">
       <img src="menu/${char.id}.png" alt="" class="character-pic" />
   </div>
@@ -188,37 +220,108 @@ function addToPick() {
 addToPick();
 
 const swapMembers = () => {
-  characters.map((char) => {
-    const main = document?.querySelector(`.${char.id}InParty`);
-
-    main?.addEventListener('click', () => {
+  inParty.map((char) => {
+    const selected = document?.querySelector(`.${char.id}InParty`);
+    selected.addEventListener('click', () => {
       console.log(char.id);
-      characters.map((char2) => {
+    });
+
+    selected?.addEventListener('click', () => {
+      notInParty.map((char2) => {
         const pick = document?.querySelector(`.${char2.id}`);
         pick?.addEventListener('click', () => {
           console.log(char.id, char2.id);
-          char.inParty = !char.inParty;
-          char2.inParty = !char2.inParty;
-          console.log(char.inParty, char2.inParty);
-          document.querySelector('.party-grid').innerHTML = ``;
-          document.querySelector('.main').innerHTML = ``;
-          document.querySelector('.pick').innerHTML = ``;
-          addtoParty();
-          addToPick();
-          init();
-          // document.querySelector('.party-grid').innerHTML += `<a href="#">
-          // <div class="party-background">
-          //   <div class="character-pic ${char.id}">
-          //       <img src="menu/${char.id}.png" alt="" class="character-pic" />
-          //   </div>
-          // </div>
-          // </a>`;
+          document.querySelector(`.${char.id}InParty`).innerHTML = ``;
+          document.querySelector(`.${char.id}InParty`).innerHTML = `
+          <div class="character">
+        <div class="character-background">
+          <div class="character-pic">
+            <img src="menu/${char2.id}.png" alt="" class="character-pic" />
+          </div>
+        </div>
+        <div class="character-name">
+          <p>${char2.name}</p>
+        </div>
+        <div class="character-lv">
+          <p>LV</p>
+        </div>
+        <div class="character-lv-num">
+          <p>${char2.level}</p>
+        </div>
+        <div class="character-hp">
+          <p>HP</p>
+        </div>
+        <div class="num-grid hp-grid">
+          <div class="character-hp-num">
+            <p>${char2.hpCurrent}/${char2.hpMax}</p>
+          </div>
+          <div class="whole-bar">
+            <div class="hp-bar bar"></div>
+            <div class="black-bar"></div>
+          </div>
+        </div>
+        <div class="character-mp">
+          <p>MP</p>
+        </div>
+        <div class="num-grid mp-grid">
+          <div class="character-mp-num">
+            <p>${char2.mpCurrent}/${char2.mpMax}</p>
+          </div>
+          <div class="whole-bar">
+            <div class="mp-bar bar"></div>
+            <div class="black-bar"></div>
+          </div>
+        </div>
+</div>
+          `;
+          document.querySelector(`.${char2.id}InPick`).innerHTML = ``;
+          document.querySelector(`.${char2.id}InPick`).innerHTML = `
+          <div class="party-background">
+  <div class="character-pic ${char.id}">
+      <img src="menu/${char.id}.png" alt="" class="character-pic" />
+  </div>
+</div>
+          `;
         });
       });
     });
   });
 };
+
 swapMembers();
+
+// const swapMembers = () => {
+//   characters.map((char) => {
+//     const main = document?.querySelector(`.${char.id}InParty`);
+
+//     main?.addEventListener('click', () => {
+//       console.log(char.id);
+//       characters.map((char2) => {
+//         const pick = document?.querySelector(`.${char2.id}`);
+//         pick?.addEventListener('click', () => {
+//           console.log(char.id, char2.id);
+//           char.inParty = !char.inParty;
+//           char2.inParty = !char2.inParty;
+//           console.log(char.inParty, char2.inParty);
+//           document.querySelector('.party-grid').innerHTML = ``;
+//           document.querySelector('.main').innerHTML = ``;
+//           document.querySelector('.pick').innerHTML = ``;
+//           addtoParty();
+//           addToPick();
+//           init();
+//           // document.querySelector('.party-grid').innerHTML += `<a href="#">
+//           // <div class="party-background">
+//           //   <div class="character-pic ${char.id}">
+//           //       <img src="menu/${char.id}.png" alt="" class="character-pic" />
+//           //   </div>
+//           // </div>
+//           // </a>`;
+//         });
+//       });
+//     });
+//   });
+// };
+// swapMembers();
 
 ///////////////////////////////////////////////////////////////
 /*--------- SHOW CHARACTER ON HOVER & PARTY SWAP  -----------*/
@@ -235,8 +338,6 @@ function init() {
       });
     });
 
-    const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
-
     const showChar = (char) => {
       pickMenu.innerHTML = `
     
@@ -247,20 +348,22 @@ function init() {
         </div>
       </div>
       <div class="character-name">
-        <p>${char.name}</p>
+        <p style="color: ${colorCheckRed(char)}">${char.name}</p>
       </div>
       <div class="character-lv">
         <p>LV</p>
       </div>
       <div class="character-lv-num">
-        <p>${char.level}</p>
+        <p style="color: ${colorCheckRed(char)}">${char.level}</p>
       </div>
       <div class="character-hp">
         <p>HP</p>
       </div>
       <div class="num-grid hp-grid">
         <div class="character-hp-num">
-          <p>${char.hpCurrent}/${char.hpMax}</p>
+          <p><span style="color: ${colorCheckYellow(char)}">${
+        char.hpCurrent
+      }</span>/${char.hpMax}</p>
         </div>
       <div class="whole-bar">
       <div class="hp-bar bar" style="width: ${barAdjust(
@@ -276,7 +379,9 @@ function init() {
       </div>
       <div class="num-grid mp-grid">
           <div class="character-mp-num">
-              <p>${char.mpCurrent}/${char.mpMax}</p>
+              <p style="color: ${colorCheckRed(char)}">${char.mpCurrent}/${
+        char.mpMax
+      }</p>
           </div>
           <div class="whole-bar">
   
