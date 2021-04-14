@@ -1,14 +1,11 @@
 'use strict';
 
-//#b2000a zero health red
-//#E8E800 low health yellow
-
-const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
 ////////////////////////////////////////
 /*--------- DOM ELEMENTS  -----------*/
 ////////////////////////////////////////
 const pickMenu = document.querySelector('.pick');
 const mainMenu = document.querySelector('.main');
+const avail = document.querySelector('.party-grid');
 
 ////////////////////////////////////////
 /*--------- PARTY MEMBERS  -----------*/
@@ -120,6 +117,12 @@ const characters = [
 const inParty = characters.filter((char) => char.inParty);
 const notInParty = characters.filter((char) => !char.inParty);
 
+//////////////////////////////////////////
+///////////////
+/// CODE TO DYNAMICALLY CHANGE CHARACTER BAR COLORS
+
+const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
+
 const colorCheckRed = (char) => {
   if (char.hpCurrent === 0) {
     return `#b2000a`;
@@ -136,6 +139,10 @@ const colorCheckYellow = (char) => {
     return `#FFF`;
   }
 };
+
+//////////////////////////////////////////
+///////////////
+/// MARKUP FOR ADDING CHARACTERS TO DIVS
 
 const partyMarkup = (char) => `
 <a href="#" class="${char.id}InParty">
@@ -204,14 +211,14 @@ const pickMarkup = (char) => `
 </a>
 `;
 
-function addtoParty() {
-  inParty.map((char) => {
-    if (char.inParty && document.querySelector('.main').childNodes) {
-      document.querySelector('.main').innerHTML += partyMarkup(char);
-    }
-  });
+function addToParty() {
+  for (let i = 0; i < 3; i++) {
+    document.querySelector(`.char${i + 1}`).innerHTML += partyMarkup(
+      inParty[i]
+    );
+  }
 }
-addtoParty();
+addToParty();
 
 function addToPick() {
   notInParty.map((char) => {
@@ -223,33 +230,82 @@ function addToPick() {
 
 addToPick();
 
-const swapMembers = () => {
-  inParty.map((char) => {
-    const selected = document?.querySelector(`.${char.id}InParty`);
-    selected.addEventListener('click', () => {
-      console.log(char.id);
-    });
+// const swapMembers = () => {
+//   inParty.map((char) => {
+//     const selected = document?.querySelector(`.${char.id}Div`);
+//     selected.addEventListener('click', () => {
+//       console.log(char.id);
+//     });
 
-    selected?.addEventListener('click', () => {
-      notInParty.map((char2) => {
-        const pick = document?.querySelector(`.${char2.id}`);
-        pick?.addEventListener('click', () => {
-          console.log(char.id, char2.id);
-          document.querySelector(`.${char.id}InParty`).innerHTML = ``;
-          document.querySelector(`.${char.id}InParty`).innerHTML = partyMarkup(
-            char2
-          );
-          document.querySelector(`.${char2.id}InPick`).innerHTML = ``;
-          document.querySelector(`.${char2.id}InPick`).innerHTML = pickMarkup(
-            char
-          );
-        });
-      });
+//     selected?.addEventListener('click', () => {
+//       notInParty.map((char2) => {
+//         const pick = document?.querySelector(`.${char2.id}`);
+//         pick?.addEventListener('click', () => {
+//           console.log(char.id, char2.id);
+//           document.querySelector(`.${char.id}InParty`).innerHTML = ``;
+//           document.querySelector(`.${char.id}InParty`).innerHTML = partyMarkup(
+//             char2
+//           );
+//           document.querySelector(`.${char2.id}InPick`).innerHTML = ``;
+//           document.querySelector(`.${char2.id}InPick`).innerHTML = pickMarkup(
+//             char
+//           );
+//         });
+//       });
+//     });
+//   });
+// };
+
+// swapMembers();
+
+document.querySelector('.char1').addEventListener('click', () => {
+  console.log(inParty[0].name);
+  notInParty.map((char, index) => {
+    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+      document.querySelector('.char1').innerHTML = ``;
+      document.querySelector('.char1').innerHTML = partyMarkup(char);
+      document.querySelector(`.${char.id}InPick`).remove();
+      let tempChar = inParty[0];
+      inParty[0] = notInParty[index];
+      notInParty[index] = tempChar;
+      avail.innerHTML += pickMarkup(notInParty[index]);
+      pickMenu.innerHTML = ``;
+      init();
     });
   });
-};
-
-swapMembers();
+});
+document.querySelector('.char2').addEventListener('click', () => {
+  console.log(inParty[1].name);
+  notInParty.map((char, index) => {
+    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+      document.querySelector('.char2').innerHTML = ``;
+      document.querySelector('.char2').innerHTML = partyMarkup(char);
+      document.querySelector(`.${char.id}InPick`).remove();
+      let tempChar = inParty[1];
+      inParty[1] = notInParty[index];
+      notInParty[index] = tempChar;
+      avail.innerHTML += pickMarkup(notInParty[index]);
+      pickMenu.innerHTML = ``;
+      init();
+    });
+  });
+});
+document.querySelector('.char3').addEventListener('click', () => {
+  console.log(inParty[2].name);
+  notInParty.map((char, index) => {
+    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+      document.querySelector('.char3').innerHTML = ``;
+      document.querySelector('.char3').innerHTML = partyMarkup(char);
+      document.querySelector(`.${char.id}InPick`).remove();
+      let tempChar = inParty[2];
+      inParty[2] = notInParty[index];
+      notInParty[index] = tempChar;
+      avail.innerHTML += pickMarkup(notInParty[index]);
+      pickMenu.innerHTML = ``;
+      init();
+    });
+  });
+});
 
 ///////////////////////////////////////////////////
 /*--------- SHOW CHARACTER EDIT MENU  -----------*/
@@ -266,69 +322,12 @@ function init() {
     charDiv?.addEventListener('mouseover', () => {
       showChar(char);
       charDiv?.addEventListener('mouseleave', () => {
-        document.querySelector(`.${char.id}gen`).classList.add('hidden');
+        document.querySelector(`.${char.id}InParty`).classList.add('hidden');
       });
     });
 
     const showChar = (char) => {
-      pickMenu.innerHTML = `
-    
-    <div class="character hoverpick ${char.id}gen">
-      <div class="character-background">
-        <div class="character-pic">
-          <img src="menu/${char.id}.png" alt="" class="character-pic">
-        </div>
-      </div>
-      <div class="character-name">
-        <p style="color: ${colorCheckRed(char)}">${char.name}</p>
-      </div>
-      <div class="character-lv">
-        <p>LV</p>
-      </div>
-      <div class="character-lv-num">
-        <p style="color: ${colorCheckRed(char)}">${char.level}</p>
-      </div>
-      <div class="character-hp">
-        <p>HP</p>
-      </div>
-      <div class="num-grid hp-grid">
-        <div class="character-hp-num">
-          <p style="color: ${colorCheckRed(
-            char
-          )}"><span style="color: ${colorCheckYellow(char)}">${
-        char.hpCurrent
-      }</span>/${char.hpMax}</p>
-        </div>
-      <div class="whole-bar">
-      <div class="hp-bar bar" style="width: ${barAdjust(
-        char.hpCurrent,
-        char.hpMax
-      )}%">
-      </div>
-      <div class="black-bar"></div>
-          </div>
-      </div>
-      <div class="character-mp">
-          <p>MP</p>
-      </div>
-      <div class="num-grid mp-grid">
-          <div class="character-mp-num">
-              <p style="color: ${colorCheckRed(char)}">${char.mpCurrent}/${
-        char.mpMax
-      }</p>
-          </div>
-          <div class="whole-bar">
-  
-              <div class="mp-bar bar" style="width: ${barAdjust(
-                char.mpCurrent,
-                char.mpMax
-              )}%"></div>
-              <div class="black-bar"></div>
-          </div>
-      </div>
-  </div>
-  
-    `;
+      pickMenu.innerHTML = partyMarkup(char);
     };
   });
 }
