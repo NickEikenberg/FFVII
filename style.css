@@ -251,3 +251,13 @@ a {
 a:hover {
   cursor: pointer;
 }
+
+.adjust-lv,
+.adjust-hp,
+.adjust-mp {
+  grid-column: 1/4;
+}
+
+.slider {
+  width: 100%;
+}
