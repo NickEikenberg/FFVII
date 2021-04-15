@@ -130,16 +130,9 @@ const characters = [
   },
 ];
 
-characters.sort(() => Math.random() - 0.5);
-
+// characters.sort(() => Math.random() - 0.5);
 const inParty = characters.filter((char) => char.inParty);
 const notInParty = characters.filter((char) => !char.inParty);
-// console.log(inParty);
-// console.log(notInParty);
-
-// for (let i = 0; i < characters.length; i++) {
-//   console.log(characters[i].inParty);
-// }
 
 //////////////////////////////////////////////////////
 /// CODE TO DYNAMICALLY CHANGE CHARACTER BAR COLORS //
@@ -169,7 +162,6 @@ const colorCheckYellow = (char) => {
 //////////////////////////////////////////
 
 const partyMarkup = (char) => `
-<a href="#" class="${char.id}InParty">
 <div class="character ${char.id}Div">
         <div class="character-background">
           <div class="character-pic">
@@ -222,17 +214,14 @@ const partyMarkup = (char) => `
           </div>
         </div>
 </div>
-</a>
 `;
 
 const pickMarkup = (char) => `
-<a href="#" class="${char.id}InPick">
 <div class="party-background ${char.id}Div">
 <div class="character-pic ${char.id}">
 <img src="menu/${char.id}.png" alt="" class="character-pic" />
 </div>
 </div>
-</a>
 `;
 
 const slidersMarkup = `
@@ -327,9 +316,11 @@ const slidersMarkup = `
 function init() {
   function addToParty() {
     for (let i = 0; i < 3; i++) {
-      document.querySelector(`.char${i + 1}`).innerHTML += partyMarkup(
+      document.querySelector(
+        `.char${i + 1}`
+      ).innerHTML += `<a href='#' class="${inParty[i].id}InParty">${partyMarkup(
         inParty[i]
-      );
+      )}</a>`;
     }
 
     // inParty.forEach((member) => {
@@ -342,12 +333,13 @@ function init() {
   addToParty();
 
   function addToPick() {
-    notInParty.map((char) => {
-      if (!char.inParty && !avail.classList.contains(`.${char.id}InPick`)) {
-        avail.classList.add(`${char.id}pick`);
-        avail.innerHTML += pickMarkup(char);
-      }
-    });
+    for (let i = 0; i < 7; i++) {
+      document.querySelector(
+        `.pick${i + 1}`
+      ).innerHTML += `<a href='#' class="${
+        notInParty[i].id
+      }InPick">${pickMarkup(notInParty[i])}</a>`;
+    }
   }
 
   addToPick();
@@ -363,7 +355,7 @@ function init() {
     charDiv?.addEventListener('mouseover', () => {
       showChar(char);
       charDiv?.addEventListener('mouseleave', () => {
-        document.querySelector(`.${char.id}InParty`).classList.add('hidden');
+        pickMenu.innerHTML = ``;
       });
     });
   });
@@ -405,6 +397,30 @@ function init() {
     });
   }
   openEditMenu();
+
+  inParty.forEach((char) => {
+    const firstPick = document.querySelector(`.${char.id}InParty`);
+
+    firstPick.addEventListener('click', () => {
+      firstPick.classList.add('active');
+      notInParty.forEach((char2) => {
+        const secPick = document.querySelector(`.${char2.id}InPick`);
+
+        secPick.addEventListener('click', () => {
+          const secPickHTML = document.querySelector(`.${char2.id}InPick`);
+          secPickHTML.classList.add('activePick');
+          document.querySelector(`.active`).innerHTML = partyMarkup(char2);
+          document.querySelector('.activePick').innerHTML = pickMarkup(char);
+          firstPick.classList.remove('active');
+          firstPick.classList.remove(`${char.id}InParty`);
+          firstPick.classList.add(`${char2.id}InParty`);
+          secPickHTML.classList.remove('activePick');
+          secPickHTML.classList.add(`.${char.id}InPick`);
+          secPickHTML.classList.remove(`.${char2.id}InPick`);
+        });
+      });
+    });
+  });
 }
 
 init();

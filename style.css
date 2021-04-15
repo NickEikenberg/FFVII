@@ -55,7 +55,7 @@ body {
 .menu-container {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
-  height: 92vh;
+  height: 100%;
   background-color: #000;
   display: grid;
 }
