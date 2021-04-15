@@ -11,6 +11,22 @@ const avail = document.querySelector('.party-grid');
 /*--------- PARTY MEMBERS  -----------*/
 ////////////////////////////////////////
 
+const trueFalse = [
+  true,
+  true,
+  true,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+];
+
+const assignBoolean = () =>
+  trueFalse.splice(Math.floor(Math.random() * trueFalse.length), 1)[0];
+
 const characters = [
   {
     id: 'cloud',
@@ -20,7 +36,7 @@ const characters = [
     hpMax: 8769, //8769
     mpCurrent: 777, //999
     mpMax: 999, //999
-    inParty: true,
+    inParty: assignBoolean(),
   },
   {
     id: 'aeris',
@@ -30,7 +46,7 @@ const characters = [
     hpMax: 1200,
     mpCurrent: 239,
     mpMax: 634,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'barret',
@@ -40,7 +56,7 @@ const characters = [
     hpMax: 6146,
     mpCurrent: 480,
     mpMax: 531,
-    inParty: true,
+    inParty: assignBoolean(),
   },
   {
     id: 'tifa',
@@ -50,7 +66,7 @@ const characters = [
     hpMax: 3146,
     mpCurrent: 700,
     mpMax: 739,
-    inParty: true,
+    inParty: assignBoolean(),
   },
   {
     id: 'redxiii',
@@ -60,7 +76,7 @@ const characters = [
     hpMax: 5127,
     mpCurrent: 785,
     mpMax: 932,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'caitsith',
@@ -70,7 +86,7 @@ const characters = [
     hpMax: 5822,
     mpCurrent: 504,
     mpMax: 544,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'cid',
@@ -80,7 +96,7 @@ const characters = [
     hpMax: 5822,
     mpCurrent: 130,
     mpMax: 544,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'yuffie',
@@ -90,7 +106,7 @@ const characters = [
     hpMax: 5373,
     mpCurrent: 330,
     mpMax: 577,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'vincent',
@@ -100,7 +116,7 @@ const characters = [
     hpMax: 5086,
     mpCurrent: 500,
     mpMax: 598,
-    inParty: false,
+    inParty: assignBoolean(),
   },
   {
     id: 'sephiroth',
@@ -110,16 +126,24 @@ const characters = [
     hpMax: 9000,
     mpCurrent: 999,
     mpMax: 999,
-    inParty: false,
+    inParty: assignBoolean(),
   },
 ];
 
+characters.sort(() => Math.random() - 0.5);
+
 const inParty = characters.filter((char) => char.inParty);
 const notInParty = characters.filter((char) => !char.inParty);
+// console.log(inParty);
+// console.log(notInParty);
 
-//////////////////////////////////////////
-///////////////
-/// CODE TO DYNAMICALLY CHANGE CHARACTER BAR COLORS
+// for (let i = 0; i < characters.length; i++) {
+//   console.log(characters[i].inParty);
+// }
+
+//////////////////////////////////////////////////////
+/// CODE TO DYNAMICALLY CHANGE CHARACTER BAR COLORS //
+//////////////////////////////////////////////////////
 
 const barAdjust = (cur, max) => (cur / max) * 100; // HP/MP value percentage
 
@@ -141,8 +165,8 @@ const colorCheckYellow = (char) => {
 };
 
 //////////////////////////////////////////
-///////////////
-/// MARKUP FOR ADDING CHARACTERS TO DIVS
+// MARKUP FOR ADDING CHARACTERS TO DIVS //
+//////////////////////////////////////////
 
 const partyMarkup = (char) => `
 <a href="#" class="${char.id}InParty">
@@ -211,113 +235,130 @@ const pickMarkup = (char) => `
 </a>
 `;
 
-function addToParty() {
-  for (let i = 0; i < 3; i++) {
-    document.querySelector(`.char${i + 1}`).innerHTML += partyMarkup(
-      inParty[i]
-    );
-  }
-}
-addToParty();
+const slidersMarkup = `
+<div class="adjust-lv" style="height: 100%">
+  <div class="adjust-lv-text">
+    <p>Adjust LV</p>
+  </div>
+  <div class="adjust-lv-slider">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+</div>
+<div class="adjust-hp">
+  <div class="adjust-hp-text">
+    <p>Adjust HP</p>
+  </div>
+  <div class="adjust-hp-slider">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+</div>
+<div class="adjust-mp">
+  <div class="adjust-mp-text">
+    <p>Adjust MP</p>
+  </div>
+  <div class="adjust-mp-slider">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+  <div class="btn-closeDiv">
+    <a href="#" class="btn-close"><p>Close</p></a>
+  </div>
+</div>
+`;
 
-function addToPick() {
-  notInParty.map((char) => {
-    if (!char.inParty) {
-      document.querySelector('.party-grid').innerHTML += pickMarkup(char);
-    }
-  });
-}
-
-addToPick();
-
-// const swapMembers = () => {
-//   inParty.map((char) => {
-//     const selected = document?.querySelector(`.${char.id}Div`);
-//     selected.addEventListener('click', () => {
-//       console.log(char.id);
-//     });
-
-//     selected?.addEventListener('click', () => {
-//       notInParty.map((char2) => {
-//         const pick = document?.querySelector(`.${char2.id}`);
-//         pick?.addEventListener('click', () => {
-//           console.log(char.id, char2.id);
-//           document.querySelector(`.${char.id}InParty`).innerHTML = ``;
-//           document.querySelector(`.${char.id}InParty`).innerHTML = partyMarkup(
-//             char2
-//           );
-//           document.querySelector(`.${char2.id}InPick`).innerHTML = ``;
-//           document.querySelector(`.${char2.id}InPick`).innerHTML = pickMarkup(
-//             char
-//           );
-//         });
-//       });
+// document.querySelector('.char1').addEventListener('click', () => {
+//   console.log(inParty[0].name);
+//   notInParty.map((char, index) => {
+//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+//       document.querySelector('.char1').innerHTML = partyMarkup(char);
+//       document.querySelector(`.${char.id}InPick`).remove();
+//       let tempChar = inParty[0];
+//       avail.classList.add(`${inParty[0].id}pick`);
+//       inParty[0] = notInParty[index];
+//       notInParty[index] = tempChar;
+//       avail.innerHTML += pickMarkup(notInParty[index]);
+//       pickMenu.innerHTML = ``;
+//       init();
+//       openEditMenu();
+//       avail.classList.remove(`${char.id}pick`);
+//       // avail.innerHTML += pickMarkup(notInParty[notInParty.length]);
 //     });
 //   });
-// };
-
-// swapMembers();
-
-document.querySelector('.char1').addEventListener('click', () => {
-  console.log(inParty[0].name);
-  notInParty.map((char, index) => {
-    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-      document.querySelector('.char1').innerHTML = ``;
-      document.querySelector('.char1').innerHTML = partyMarkup(char);
-      document.querySelector(`.${char.id}InPick`).remove();
-      let tempChar = inParty[0];
-      inParty[0] = notInParty[index];
-      notInParty[index] = tempChar;
-      avail.innerHTML += pickMarkup(notInParty[index]);
-      pickMenu.innerHTML = ``;
-      init();
-    });
-  });
-});
-document.querySelector('.char2').addEventListener('click', () => {
-  console.log(inParty[1].name);
-  notInParty.map((char, index) => {
-    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-      document.querySelector('.char2').innerHTML = ``;
-      document.querySelector('.char2').innerHTML = partyMarkup(char);
-      document.querySelector(`.${char.id}InPick`).remove();
-      let tempChar = inParty[1];
-      inParty[1] = notInParty[index];
-      notInParty[index] = tempChar;
-      avail.innerHTML += pickMarkup(notInParty[index]);
-      pickMenu.innerHTML = ``;
-      init();
-    });
-  });
-});
-document.querySelector('.char3').addEventListener('click', () => {
-  console.log(inParty[2].name);
-  notInParty.map((char, index) => {
-    document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-      document.querySelector('.char3').innerHTML = ``;
-      document.querySelector('.char3').innerHTML = partyMarkup(char);
-      document.querySelector(`.${char.id}InPick`).remove();
-      let tempChar = inParty[2];
-      inParty[2] = notInParty[index];
-      notInParty[index] = tempChar;
-      avail.innerHTML += pickMarkup(notInParty[index]);
-      pickMenu.innerHTML = ``;
-      init();
-    });
-  });
-});
-
-///////////////////////////////////////////////////
-/*--------- SHOW CHARACTER EDIT MENU  -----------*/
-///////////////////////////////////////////////////
+// });
+// document.querySelector('.char2').addEventListener('click', () => {
+//   console.log(inParty[1].name);
+//   notInParty.map((char, index) => {
+//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+//       //toggle hidden class to fix missing characters problem. Figure out later
+//       document.querySelector('.char2').innerHTML = ``;
+//       document.querySelector('.char2').innerHTML = partyMarkup(char);
+//       document.querySelector(`.${char.id}InPick`).remove();
+//       let tempChar = inParty[1];
+//       inParty[1] = notInParty[index];
+//       notInParty[index] = tempChar;
+//       avail.innerHTML += pickMarkup(notInParty[index]);
+//       pickMenu.innerHTML = ``;
+//       init();
+//       openEditMenu();
+//     });
+//   });
+// });
+// document.querySelector('.char3').addEventListener('click', () => {
+//   console.log(inParty[2].name);
+//   notInParty.map((char, index) => {
+//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
+//       document.querySelector('.char3').innerHTML = ``;
+//       document.querySelector('.char3').innerHTML = partyMarkup(char);
+//       document.querySelector(`.${char.id}InPick`).remove();
+//       let tempChar = inParty[2];
+//       inParty[2] = notInParty[index];
+//       notInParty[index] = tempChar;
+//       avail.innerHTML += pickMarkup(notInParty[index]);
+//       pickMenu.innerHTML = ``;
+//       init();
+//       openEditMenu();
+//     });
+//   });
+// });
 
 ///////////////////////////////////////////////////////////////
 /*--------- SHOW CHARACTER ON HOVER & PARTY SWAP  -----------*/
 ///////////////////////////////////////////////////////////////
 
 function init() {
+  function addToParty() {
+    for (let i = 0; i < 3; i++) {
+      document.querySelector(`.char${i + 1}`).innerHTML += partyMarkup(
+        inParty[i]
+      );
+    }
+
+    // inParty.forEach((member) => {
+    //   for (let i = 1; i <= 3; i++) {
+    //     console.log(member);
+    //     document.querySelector(`.char${i}`).innerHTML = partyMarkup(member);
+    //   }
+    // });
+  }
+  addToParty();
+
+  function addToPick() {
+    notInParty.map((char) => {
+      if (!char.inParty && !avail.classList.contains(`.${char.id}InPick`)) {
+        avail.classList.add(`${char.id}pick`);
+        avail.innerHTML += pickMarkup(char);
+      }
+    });
+  }
+
+  addToPick();
+  ////////////////////////////////////////////
+  // CHARACTER APPEARS IN PICK MENU ON HOVER//
+  ////////////////////////////////////////////
   characters.map((char) => {
-    const charDiv = document?.querySelector(`.${char.id}`);
+    const charDiv = document?.querySelector(`.${char.id}InPick`);
+    const showChar = (char) => {
+      pickMenu.innerHTML = partyMarkup(char);
+    };
 
     charDiv?.addEventListener('mouseover', () => {
       showChar(char);
@@ -325,38 +366,45 @@ function init() {
         document.querySelector(`.${char.id}InParty`).classList.add('hidden');
       });
     });
-
-    const showChar = (char) => {
-      pickMenu.innerHTML = partyMarkup(char);
-    };
   });
+
+  const children = mainMenu.childNodes;
+
+  // children.forEach((child) => {
+  //   child.addEventListener('click', () => {
+  //     // FUNCTION TO SWAP PARTY
+  //     notInParty.map((char) => {
+  //       document
+  //         .querySelector(`.${char.id}Div`)
+  //         .addEventListener('click', () => {
+  //           for (let i = 1; i < 3; i++) {
+  //             // console.log(document.querySelector(`.char${i}`));
+  //             document.querySelector(`.char${i}`).innerHTML = partyMarkup(char);
+  //           }
+  //         });
+  //     });
+  //   });
+  // });
+
+  ///////////////////////////////////////////////////
+  /*--------- SHOW CHARACTER EDIT MENU  -----------*/
+  ///////////////////////////////////////////////////
+
+  function openEditMenu() {
+    inParty.map((char) => {
+      document
+        .querySelector(`.${char.id}InParty`)
+        .addEventListener('dblclick', () => {
+          avail.innerHTML = ``;
+          avail.innerHTML += slidersMarkup;
+          document.querySelector('.btn-close').addEventListener('click', () => {
+            avail.innerHTML = ``;
+            addToPick();
+          });
+        });
+    });
+  }
+  openEditMenu();
 }
 
 init();
-
-const slidersMarkup = `
-<div class="adjust-lv">
-                <div class="adjust-lv-text">
-                  <p>Adjust LV</p>
-                </div>
-                <div class="adjust-lv-slider">
-                  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-                </div>
-              </div>
-              <div class="adjust-hp">
-                <div class="adjust-hp-text">
-                  <p>Adjust HP</p>
-                </div>
-                <div class="adjust-hp-slider">
-                  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-                </div>
-              </div>
-              <div class="adjust-mp">
-                <div class="adjust-mp-text">
-                  <p>Adjust MP</p>
-                </div>
-                <div class="adjust-mp-slider">
-                  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-                </div>
-              </div>
-`;
