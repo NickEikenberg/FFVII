@@ -333,21 +333,6 @@ function init() {
         .addEventListener('dblclick', () => {
           avail.innerHTML = ``;
           avail.innerHTML += slidersMarkup(char);
-          let sliderLV = document.querySelector(`.${char.id}sliderLV`);
-          let sliderHP = document.querySelector(`.${char.id}sliderHP`);
-          let sliderMP = document.querySelector(`.${char.id}sliderMP`);
-          document.querySelector(`.${char.id}-lv`).innerHTML = sliderLV.value;
-          sliderLV.onInput = function () {
-            document.querySelector(`.${char.id}-lv`).innerHTML = this.value;
-          };
-          document.querySelector(`.${char.id}-hp`).innerHTML = sliderHP.value;
-          sliderHP.onInput = function () {
-            document.querySelector(`.${char.id}-hp`).innerHTML = this.value;
-          };
-          document.querySelector(`.${char.id}-mp`).innerHTML = sliderMP.value;
-          sliderMP.onInput = function () {
-            document.querySelector(`.${char.id}-mp`).innerHTML = this.value;
-          };
           document.querySelector('.btn-close').addEventListener('click', () => {
             avail.innerHTML = `
             <div class="pick1"></div>
