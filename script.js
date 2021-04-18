@@ -6,6 +6,16 @@
 const pickMenu = document.querySelector('.pick');
 const mainMenu = document.querySelector('.main');
 const avail = document.querySelector('.party-grid');
+const party1 = document.querySelector('.char1');
+const party2 = document.querySelector('.char2');
+const party3 = document.querySelector('.char3');
+const pick1 = document.querySelector('.pick1');
+const pick2 = document.querySelector('.pick2');
+const pick3 = document.querySelector('.pick3');
+const pick4 = document.querySelector('.pick4');
+const pick5 = document.querySelector('.pick5');
+const pick6 = document.querySelector('.pick6');
+const pick7 = document.querySelector('.pick3');
 
 ////////////////////////////////////////
 /*--------- PARTY MEMBERS  -----------*/
@@ -175,18 +185,20 @@ const partyMarkup = (char) => `
           <p>LV</p>
         </div>
         <div class="character-lv-num">
-          <p style="color: ${colorCheckRed(char)}">${char.level}</p>
+          <p class="${char.id}-lv" style="color: ${colorCheckRed(char)}">${
+  char.level
+}</p>
         </div>
         <div class="character-hp">
           <p>HP</p>
         </div>
         <div class="num-grid hp-grid">
           <div class="character-hp-num">
-            <p style="color: ${colorCheckRed(
-              char
-            )}"><span style="color: ${colorCheckYellow(char)}">${
-  char.hpCurrent
-}</span>/${char.hpMax}</p>
+            <p style="color: ${colorCheckRed(char)}"><span class="${
+  char.id
+}-hp" style="color: ${colorCheckYellow(char)}">${char.hpCurrent}</span>/${
+  char.hpMax
+}</p>
           </div>
           <div class="whole-bar">
             <div class="hp-bar bar" style="width:${barAdjust(
@@ -201,9 +213,9 @@ const partyMarkup = (char) => `
         </div>
         <div class="num-grid mp-grid">
           <div class="character-mp-num">
-            <p style="color: ${colorCheckRed(char)}">${char.mpCurrent}/${
-  char.mpMax
-}</p>
+            <p style="color: ${colorCheckRed(char)}"><span class="${
+  char.id
+}-mp">${char.mpCurrent}</span>/${char.mpMax}</p>
           </div>
           <div class="whole-bar">
             <div class="mp-bar bar" style="width:${barAdjust(
@@ -224,13 +236,13 @@ const pickMarkup = (char) => `
 </div>
 `;
 
-const slidersMarkup = `
+const slidersMarkup = (char) => `
 <div class="adjust-lv" style="height: 100%">
   <div class="adjust-lv-text">
     <p>Adjust LV</p>
   </div>
   <div class="adjust-lv-slider">
-    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    <input type="range" min="1" max="99" value=${char.level} class="${char.id}sliderLV slider" id="myRange">
   </div>
 </div>
 <div class="adjust-hp">
@@ -238,7 +250,7 @@ const slidersMarkup = `
     <p>Adjust HP</p>
   </div>
   <div class="adjust-hp-slider">
-    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    <input type="range" min="0" max=${char.hpMax} value=${char.hpCurrent} class="${char.id}sliderHP slider" id="myRange">
   </div>
 </div>
 <div class="adjust-mp">
@@ -246,68 +258,13 @@ const slidersMarkup = `
     <p>Adjust MP</p>
   </div>
   <div class="adjust-mp-slider">
-    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    <input type="range" min="0" max=${char.mpMax} value=${char.mpCurrent} class="${char.id}sliderMP slider" id="myRange">
   </div>
   <div class="btn-closeDiv">
     <a href="#" class="btn-close"><p>Close</p></a>
   </div>
 </div>
 `;
-
-// document.querySelector('.char1').addEventListener('click', () => {
-//   console.log(inParty[0].name);
-//   notInParty.map((char, index) => {
-//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-//       document.querySelector('.char1').innerHTML = partyMarkup(char);
-//       document.querySelector(`.${char.id}InPick`).remove();
-//       let tempChar = inParty[0];
-//       avail.classList.add(`${inParty[0].id}pick`);
-//       inParty[0] = notInParty[index];
-//       notInParty[index] = tempChar;
-//       avail.innerHTML += pickMarkup(notInParty[index]);
-//       pickMenu.innerHTML = ``;
-//       init();
-//       openEditMenu();
-//       avail.classList.remove(`${char.id}pick`);
-//       // avail.innerHTML += pickMarkup(notInParty[notInParty.length]);
-//     });
-//   });
-// });
-// document.querySelector('.char2').addEventListener('click', () => {
-//   console.log(inParty[1].name);
-//   notInParty.map((char, index) => {
-//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-//       //toggle hidden class to fix missing characters problem. Figure out later
-//       document.querySelector('.char2').innerHTML = ``;
-//       document.querySelector('.char2').innerHTML = partyMarkup(char);
-//       document.querySelector(`.${char.id}InPick`).remove();
-//       let tempChar = inParty[1];
-//       inParty[1] = notInParty[index];
-//       notInParty[index] = tempChar;
-//       avail.innerHTML += pickMarkup(notInParty[index]);
-//       pickMenu.innerHTML = ``;
-//       init();
-//       openEditMenu();
-//     });
-//   });
-// });
-// document.querySelector('.char3').addEventListener('click', () => {
-//   console.log(inParty[2].name);
-//   notInParty.map((char, index) => {
-//     document?.querySelector(`.${char.id}`).addEventListener('click', () => {
-//       document.querySelector('.char3').innerHTML = ``;
-//       document.querySelector('.char3').innerHTML = partyMarkup(char);
-//       document.querySelector(`.${char.id}InPick`).remove();
-//       let tempChar = inParty[2];
-//       inParty[2] = notInParty[index];
-//       notInParty[index] = tempChar;
-//       avail.innerHTML += pickMarkup(notInParty[index]);
-//       pickMenu.innerHTML = ``;
-//       init();
-//       openEditMenu();
-//     });
-//   });
-// });
 
 ///////////////////////////////////////////////////////////////
 /*--------- SHOW CHARACTER ON HOVER & PARTY SWAP  -----------*/
@@ -346,52 +303,63 @@ function init() {
   ////////////////////////////////////////////
   // CHARACTER APPEARS IN PICK MENU ON HOVER//
   ////////////////////////////////////////////
-  characters.map((char) => {
-    const charDiv = document?.querySelector(`.${char.id}InPick`);
-    const showChar = (char) => {
-      pickMenu.innerHTML = partyMarkup(char);
-    };
+  function enableHover() {
+    characters.map((char) => {
+      const charDiv = document?.querySelector(`.${char.id}InPick`);
+      const showChar = (char) => {
+        pickMenu.innerHTML = partyMarkup(char);
+      };
 
-    charDiv?.addEventListener('mouseover', () => {
-      showChar(char);
-      charDiv?.addEventListener('mouseleave', () => {
-        pickMenu.innerHTML = ``;
+      charDiv?.addEventListener('mouseover', () => {
+        showChar(char);
+        charDiv?.addEventListener('mouseleave', () => {
+          pickMenu.innerHTML = ``;
+        });
       });
     });
-  });
+  }
+  enableHover();
 
   const children = mainMenu.childNodes;
-
-  // children.forEach((child) => {
-  //   child.addEventListener('click', () => {
-  //     // FUNCTION TO SWAP PARTY
-  //     notInParty.map((char) => {
-  //       document
-  //         .querySelector(`.${char.id}Div`)
-  //         .addEventListener('click', () => {
-  //           for (let i = 1; i < 3; i++) {
-  //             // console.log(document.querySelector(`.char${i}`));
-  //             document.querySelector(`.char${i}`).innerHTML = partyMarkup(char);
-  //           }
-  //         });
-  //     });
-  //   });
-  // });
 
   ///////////////////////////////////////////////////
   /*--------- SHOW CHARACTER EDIT MENU  -----------*/
   ///////////////////////////////////////////////////
 
   function openEditMenu() {
-    inParty.map((char) => {
+    inParty.map((char, i) => {
       document
         .querySelector(`.${char.id}InParty`)
         .addEventListener('dblclick', () => {
           avail.innerHTML = ``;
-          avail.innerHTML += slidersMarkup;
+          avail.innerHTML += slidersMarkup(char);
+          let sliderLV = document.querySelector(`.${char.id}sliderLV`);
+          let sliderHP = document.querySelector(`.${char.id}sliderHP`);
+          let sliderMP = document.querySelector(`.${char.id}sliderMP`);
+          document.querySelector(`.${char.id}-lv`).innerHTML = sliderLV.value;
+          sliderLV.onInput = function () {
+            document.querySelector(`.${char.id}-lv`).innerHTML = this.value;
+          };
+          document.querySelector(`.${char.id}-hp`).innerHTML = sliderHP.value;
+          sliderHP.onInput = function () {
+            document.querySelector(`.${char.id}-hp`).innerHTML = this.value;
+          };
+          document.querySelector(`.${char.id}-mp`).innerHTML = sliderMP.value;
+          sliderMP.onInput = function () {
+            document.querySelector(`.${char.id}-mp`).innerHTML = this.value;
+          };
           document.querySelector('.btn-close').addEventListener('click', () => {
-            avail.innerHTML = ``;
+            avail.innerHTML = `
+            <div class="pick1"></div>
+            <div class="pick2"></div>
+            <div class="pick3"></div>
+            <div class="pick4"></div>
+            <div class="pick5"></div>
+            <div class="pick6"></div>
+            <div class="pick7"></div>
+            `;
             addToPick();
+            enableHover();
           });
         });
     });
